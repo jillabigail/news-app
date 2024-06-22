@@ -88,41 +88,38 @@ if my_page == 'About the data':
     
 elif my_page == 'Interactive highlights':
     st.title('Interacting with the Rappler dataset')
-    df = pd.read_csv("rappler-2024-cleaned-st.csv")
+    df = pd.read_csv("data/rappler-2024-cleaned-st.csv")
 
-    # Add text input for filter to specific keywords
     keywords = st.text_input(
         label='Keywords for filtering the data. If multiple keywords, make a comma-separated list',
         value=''
     )
-        
+    
     keywords = [kw.strip() for kw in keywords.split(',')]
     
     st.write(keywords)
     
-    # Add multi-select columns where keywords will be searched
     search_cols = st.multiselect(
         'Select columns where keywords will be searched',
         df.columns)
     
-    st.write(search_cols)
     if search_cols:
         marker_cols = list()
         for col in search_cols:
             df[col+'_marker'] = df[col].str.contains('|'.join(keywords), case=False)               
             marker_cols.append(col+'_marker')
-            
-        df['marker'] = df[marker_cols].sum(axis=1)
+
+        search_markers = [x + '_marker' for x in search_cols]
+        df['marker'] = df[search_markers].sum(axis=1)
         df['marker'] = df['marker'] > 0
 
         df = df[df['marker']]
-        df.drop(columns=marker_cols, inplace=True)
     
         if st.toggle('Show preview of data', value=True):
             st.header("Preview of the dataset")
             st.write(df.head())
-            
-        # Add bar plot for top bigrams from filtered data
+    
+        # Add bigram plot for filtered data
         st.header('Top bigrams from the filtered dataset')
         
         content = df['content.cleaned'].str.cat(sep=' ')
@@ -150,7 +147,7 @@ elif my_page == 'Interactive highlights':
         plt.title('Top 10 bigrams by frequency', fontsize=16)
         plt.gca().invert_yaxis() 
         
-        st.pyplot(fig)    
+        st.pyplot(fig)
 
 elif my_page == 'News summarization':
     st.title('Summarizing Rappler articles')
