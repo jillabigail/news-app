@@ -11,8 +11,19 @@ from skllm.models.gpt.text2text.summarization import GPTSummarizer
 from skllm.models.gpt.classification.zero_shot import ZeroShotGPTClassifier
 from openai import OpenAI
 
+##
 
-api_key = open('openaiapikey.txt').read()
+nltk.download('punkt')
+nltk.download('stopwords')
+
+##
+
+st.set_page_config(layout='wide')
+
+##
+# api_key = open('openaiapikey.txt').read()
+
+api_key = st.secrets["api_key"]
 SKLLMConfig.set_openai_key(api_key)
 client = OpenAI(api_key=api_key)
 
