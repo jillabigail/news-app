@@ -88,7 +88,7 @@ if my_page == 'About the data':
     
 elif my_page == 'Interactive highlights':
     st.title('Interacting with the Rappler dataset')
-    df = pd.read_csv("data/rappler-2024-cleaned-st.csv")
+    df = pd.read_csv("rappler-2024-cleaned-st.csv")
 
     keywords = st.text_input(
         label='Keywords for filtering the data. If multiple keywords, make a comma-separated list',
